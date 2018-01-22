@@ -32,7 +32,7 @@ imagesloaded@>=3.0.0:
   dependencies:
     ev-emitter "^1.0.0"
 
-"jquery@2 - 3", jquery@>=1.6.0, "jquery@^1.8.3 || ^2.0 || ^3.0", jquery@^3.2.1:
+"jquery@2 - 3", jquery@>=1.6.0, jquery@>=1.7, "jquery@^1.8.3 || ^2.0 || ^3.0", jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -56,3 +56,9 @@ qtip2@^3.0.3:
   dependencies:
     imagesloaded ">=3.0.0"
     jquery ">=1.6.0"
+
+timepicker@^1.11.12:
+  version "1.11.12"
+  resolved "https://registry.yarnpkg.com/timepicker/-/timepicker-1.11.12.tgz#776a18f2dfb1c72fe993058a703c5103213f6500"
+  dependencies:
+    jquery ">=1.7"

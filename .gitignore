@@ -19,7 +19,7 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-#WebStorm project
+# WebStorm project
 .idea
 
 # Dependency directory

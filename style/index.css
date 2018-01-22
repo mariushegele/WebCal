@@ -1,0 +1,105 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/*
+
+header {
+    overflow: hidden;
+    padding-right: .5em;
+    width: 100%;
+    position: absolute;
+    border-top: 20px;
+}
+
+header #monthSelector {
+    left: 50%;
+    right: -50%;
+}
+
+table {
+    overflow: hidden;
+    border-top: 30px;
+    width: 100%;
+}
+
+table thead {
+    position: absolute;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px;
+}
+*/
+.qtip {
+    max-width: 400px;
+}
+
+.ui-timepicker-wrapper {
+    position: relative;
+    z-index: 15001;
+}
+
+.date-wrapper div input[type=text] {
+    width: 120px;
+    margin: 1px;
+    margin-left: 12px;
+}
+
+.date-wrapper .date-div .end-date {
+    margin-left: 7px;
+}
+
+.date-wrapper .time-div .end-time {
+    margin-left: 22px;
+    margin-top: 2px;
+}
+
+.event-form input[type=text], textarea {
+    width: 100%;
+    padding: 4px 10px;
+    margin: 2px 0;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.event-form textarea {
+    max-width: 100%;
+    min-width: 100%;
+    resize: none;
+    min-height: 100%;
+    max-height: 100px;
+}
+
+.event-form {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.event-form div input[type=checkbox] {
+    margin: 1px;
+}
+
+
+.event-form div select {
+    margin: 1px;
+}
+
+.event-form div label {
+    margin-left: 5px;
+}
+
+.event-form div {
+    margin-top: 1px;
+}
+
+.event-div {
+    border-radius: 2px;
+    background-color: #f2f2f2;
+    padding: 10px;
+    width: 290px;
+    height: 100%x;
+}

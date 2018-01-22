@@ -1,0 +1,40 @@
+<template id="eventForm-template">
+    <div class="event-div">
+        <form class="event-form" id="event-form">
+            <input class="title" type="text" placeholder="Title">
+            <br>
+            <div>
+                <label>AllDay
+                    <input class="allday" type="checkbox" name="allday"> </label>
+                <select class="status">
+                    <option selected disabled hidden>Status</option>
+                    <option value="Free">Free</option>
+                    <option value="Busy">Busy</option>
+                    <option value="Tentative">Tentative</option>
+                </select>
+                <select class="category">
+                    <option selected disabled>Category</option>
+                    <option value="Home">Home</option>
+                    <option value="Work">Work</option>
+                </select>
+            </div>
+            <br>
+            <div class="date-wrapper">
+                <div class="date-div">
+                    <input type="text" class="start-date"> <label>to</label><input type="text" class="end-date">
+                </div>
+                <div class="time-div">
+                    <input type="text" class="start-time"><input type="text" class="end-time">
+                </div>
+            </div>
+            <br>
+            <textarea class="location" placeholder="Location" rows="1" col="50" onkeyup="auto_grow(this)"></textarea>
+            <br>
+            <input type="text" class="organizer" placeholder="Organizer">
+            <br>
+            <input type="text" class="webpage" placeholder="Webpage">
+            <br>
+            <input type="text" class="imageurl" placeholder="ImageURL">
+        </form>
+    </div>
+</template>

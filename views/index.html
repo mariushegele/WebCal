@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-150">
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>WebCal</title>
+    <script type="text/javascript" src="../libs/node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/fullcalendar/dist/fullcalendar.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/qtip2/dist/jquery.qtip.js"></script>
+    <script src="../libs/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/timepicker/jquery.timepicker.js"></script>
+    <link rel="stylesheet" href="../libs/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="../libs/node_modules/fullcalendar/dist/fullcalendar.css" />
+    <link rel="stylesheet" href="../libs/node_modules/qtip2/dist/jquery.qtip.css" />
+    <link rel="stylesheet" href="../libs/jquery-ui-1.11.4.custom/jquery-ui.css">
+    <link rel="stylesheet" href="../libs/node_modules/timepicker/jquery.timepicker.css">
+    <link rel="stylesheet" href="../style/index.css" />
+    <!-- <link rel="stylesheet" href="../style/eventForm.css" /> -->
+
+</head>
+
+
+<body>
+    <!-- HTML -->
+
+    <div id='calendar'></div>
+
+    <template id="eventForm-template">
+        <div class="event-div">
+            <form class="event-form" id="event-form">
+                <input class="title" type="text" placeholder="Title">
+                <br>
+                <div>
+                    <label>AllDay
+                        <input class="allday" type="checkbox" name="allday"> </label>
+                    <select class="status">
+                        <option selected disabled hidden>Status</option>
+                        <option value="Free">Free</option>
+                        <option value="Busy">Busy</option>
+                        <option value="Tentative">Tentative</option>
+                    </select>
+                    <select class="category">
+                        <option selected disabled>Category</option>
+                        <option value="Home">Home</option>
+                        <option value="Work">Work</option>
+                    </select>
+                </div>
+                <br>
+                <div class="date-wrapper">
+                    <div class="date-div">
+                        <input type="text" class="start-date"><label>to</label><input type="text" class="end-date">
+                    </div>
+                    <div class="time-div">
+                        <input type="text" class="start-time"><input type="text" class="end-time">
+                    </div>
+                </div>
+                <br>
+                <textarea class="location" placeholder="Location" rows="1" col="50" onkeyup="auto_grow(this)"></textarea>
+                <br>
+                <input type="text" class="organizer" placeholder="Organizer">
+                <br>
+                <input type="text" class="webpage" placeholder="Webpage">
+                <br>
+                <input type="text" class="imageurl" placeholder="ImageURL">
+            </form>
+        </div>
+    </template>
+
+
+
+    <!-- JS -->
+
+    <script type="text/javascript" src="../javascripts/controller.js"></script>
+    <script type="text/javascript" src="../javascripts/calendar.js"></script>
+    <script type="text/javascript" src="../javascripts/qtip.js"></script>
+
+</body>
+
+</html>

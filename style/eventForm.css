@@ -1,0 +1,41 @@
+.event-form input[type=text], input[type=date], textarea {
+    width: 100%;
+    padding: 6px 12px;
+    margin: 2px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.event-form {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.event-form div input[type=checkbox] {
+    margin: 1px;
+}
+
+.event-form div select {
+    margin: 1px;
+}
+
+.event-form div label {
+    margin-left: 5px;
+}
+
+.event-form div {
+    margin-bottom: -9px;
+    margin-top: 2px;
+}
+
+.event-div {
+    border-radius: 2px;
+    background-color: #f2f2f2;
+    padding: 10px;
+    width: 230px;
+    height: 100%x;
+}
