@@ -4,19 +4,20 @@ $(document).ready(function() {
             save: {
                 text: 'save',
                 click: function() {
-                    var clientEvents = $('#calendar').fullCalendar('clientEvents');
-                    console.log('All events', clientEvents);
-
                     eventsToBeChanged.forEach(function(event) {
-                        event.log();
+                        console.log('To Be Put: ', JSON.stringify(event));
                         //event.title = "Test";
                         delete event.changed;
+                        var start = moment(event.start);
+                        var end = moment(event.end);
+                        event.start = start.format('YYYY-MM-DD')  + 'T' + start.format('HH:mm');
+                        event.end = end.format('YYYY-MM-DD')  + 'T' + end.format('HH:mm');
                         console.log('Puttin Event: ', JSON.stringify(event));
                         $.ajax({
                             url: url + userID + "/events/" + event.id,
                             contentType: 'application/json',
                             type: "PUT",
-                            data: JSON.stringify(JSON.stringify(event)),
+                            data: JSON.stringify(event),
                             success: function (res) {
                                 console.log('Status 200');
                                 console.log(res);
@@ -27,30 +28,6 @@ $(document).ready(function() {
                             }
                         });
                     })
-
-                    /*
-                    clientEvents.forEach(function(calEvent) {
-                        event = new Event();
-                        event.setCalValues(calEvent);
-                        if(event.changed) {
-                            console.log('Puttin Event: ', JSON.stringify(event));
-                            $.ajax({
-                                url: url + userID + "/events/" + event.id,
-                                contentType: 'application/json',
-                                type: "PUT",
-                                data: JSON.stringify(JSON.stringify(event)),
-                                success: function (res) {
-                                    console.log('Status 200');
-                                    console.log(res);
-                                },
-                                error: function (res) {
-                                    console.log('Error getting Events: ', res.status + ' ' + res.statusText);
-                                    console.log('Code: ', res.responseJSON.code, ', Description: ', res.responseJSON.description);
-                                }
-                            });
-                        }
-                    })
-                    */
                 }
             },
             today: {
@@ -72,28 +49,18 @@ $(document).ready(function() {
         weekNumberTitle: 'W',
         locale: 'de',
         timeFormat: 'HH(:mm)',
+        defaultAllDayEventDuration: {23:59},
         eventClick: function(data, event, view) {
 
             if($('.event-form').length > 0) {
                 //if a form has actually already been opened
                 var formEvent = new Event();
                 formEvent.setFormValues();
-                formEvent.changed = true;
                 formEvent.storeEvent();
-
-                var clientEvents = $('#calendar').fullCalendar('clientEvents');
-
-                clientEvents.forEach(function(calEvent) {
-                    event = new Event();
-                    event.setCalValues(calEvent);
-                    if(event.id == formEvent.id) {
-                        event.log();
-                    }
-
-                })
+                formEvent.updateCalEvent();
             }
 
-            //console.log('Event values: ', data);
+            console.log('Event values: ', data);
             //console.log('View type: ', view);
             //console.log('Event: ', event);
             //console.log("Position: ", event.pageX);
@@ -108,7 +75,7 @@ $(document).ready(function() {
             });
 
             tooltip.set({
-                'position.target': this,
+                'position.target': [event.clientX, event.clientY],
                 'content.text': content,
                 'position.my': 'right center',
                 'position.at': 'left center'
@@ -124,18 +91,25 @@ $(document).ready(function() {
             tooltip.reposition(event)
                 .show(event);
 
-            /*
-
-
             $( ".event-form").children().each( function(index, element ){
-                $(element).keyup(function() {
-                    if(!$(element).is('textarea')) {
-                        tooltip.hide()
+                $(element).keypress(function(e) {
+                    if(e.which == 13 && !$(element).is('textarea')){
+                            tooltip.hide()
                     }
                 })
             });
 
-            */
+            $('.allday').change(function() {
+                //allday events must start and finish at specific time
+                if(this.checked) {
+                    $('.start-time').val('00:00').prop('disabled', true);
+                    $('.end-time').val('23:59').prop('disabled', true);
+                } else {
+                    //default non allday events to this period
+                    $('.start-time').val('12:00').prop('disabled', false);
+                    $('.end-time').val('13:00').prop('disabled', false);
+                }
+            })
 
             //Fill Event Form
 
@@ -151,6 +125,10 @@ $(document).ready(function() {
 
             if(data.description.categories.length > 0) {
                 $('.category').val(data.description.categories);
+            }
+
+            if(data.allDay) {
+                data.end.subtract('1', 'minute');
             }
 
             $('.start-date').val(data.start.format('YYYY-MM-DD'));
@@ -170,6 +148,27 @@ $(document).ready(function() {
         },
         dayClick: function() {
             tooltip.hide()
+        },
+        eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) {
+            var droppedEvent = new Event();
+            droppedEvent.setCalValues(event);
+            droppedEvent.log();
+            if(droppedEvent.allday) {
+                //var startHelper = event.start.format('YYYY-MM-DD')  + 'T' + event.start.format('HH:mm');
+                var startHelper = event.start.format('YYYY-MM-DDTHH:mm');
+                var endHelper = event.end.format('YYYY-MM-DD')  + 'T' + event.end.format('HH:mm');
+                event.start = startHelper;
+                event.end = endHelper;
+            }
+            droppedEvent.storeEvent();
+            droppedEvent.updateCalEvent();
+        },
+        eventResize: function(event, delta, revertFunc) {
+            var resizedEvent = new Event();
+            resizedEvent.setCalValues(event);
+            resizedEvent.storeEvent();
+            resizedEvent.updateCalEvent();
+
         },
         eventResizeStart: function() { tooltip.hide() },
         eventDragStart: function() { tooltip.hide() },

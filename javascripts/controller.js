@@ -18,12 +18,21 @@ class Event {
     }
 
     //sorts by Interval [start, end] and formats event into an fullCalendar compatible json
-    formatForCal() {
+    formatForCal(changed) {
+        if(this.allday) {   //respect that fullcalendar expects allday events to end at 0:00
+            var endDate = moment(this.end).add('1', 'day').format('YYYY-MM-DD');
+            this.end = endDate + 'T00:00';
+        } else if(!this.allday && changed) {
+            var endDate = moment(this.end).subtract('1', 'day').format('YYYY-MM-DD');
+            this.end = endDate + 'T23:59';
+        }
+
+
         var calEvent = {
             "title": this.title,
             "allDay": this.allday,
-            "start": this.start,
-            "end": this.end,
+            "start": moment(this.start),
+            "end": moment(this.end),
             "_id": this.id,
             "location": this.location,
             "description": {
@@ -42,6 +51,10 @@ class Event {
     setCalValues(calInput) {
         this.id = calInput._id;
         this.title = calInput.title;
+        if(calInput.allDay) {   //respect that database expects allday events to end at 23:59
+            var endDate = moment(calInput.allDay).subtract('1', 'day').format('YYYY-MM-DD');
+            calInput.allDay = endDate + 'T23:59';
+        }
         this.allday = calInput.allDay;
         this.start = calInput.start;
         this.end = calInput.end;
@@ -56,8 +69,6 @@ class Event {
 
     //Takes the Values from the event form thats currently open and stores them as attributes
     setFormValues() {
-        console.log('Setting Form values');
-
         this.id = $('.event-div').parent().attr('id');
         this.title = $('.title').val();
         this.allday = false;
@@ -70,11 +81,11 @@ class Event {
         this.organizer = $('.organizer').val();
         this.webpage = $('.webpage').val();
         this.changed = true;
+
+        //console.log('Form values set: ', this);
     }
 
     storeEvent() {
-        console.log('Storing event');
-
         var updatedEvent = this;
         eventsToBeChanged.forEach(function(storedEvent) {
             if(storedEvent.id == updatedEvent.id) {
@@ -84,98 +95,31 @@ class Event {
         })
 
         eventsToBeChanged.push(updatedEvent);
+
+        //console.log('Event stored: ', JSON.stringify(updatedEvent));
+    }
+
+    updateCalEvent() {
+
+        event = new Event(this);
+        var clientEvents = $('#calendar').fullCalendar('clientEvents');
+        clientEvents.forEach(function(calEvent) {
+            if(calEvent._id == event.id) {
+                var changedAllday = true;
+                if(calEvent.allDay == event.allday) changedAllday = false;
+                var formattedEvent = event.formatForCal(changedAllday);
+                for (var prop in formattedEvent) calEvent[prop] = formattedEvent[prop];
+                console.log('CalEvent to be updated: ', calEvent);
+                $('#calendar').fullCalendar('updateEvent', calEvent);
+            }
+        })
+        //console.log('Updated calendar event: ', JSON.stringify(this));
     }
 
 }
 
 /*
-function formatEvents(requestType, eventsArr, callback) {
-    switch(requestType) {
-        case 'GET':
-            var modEvents = [];
-            eventsArr.forEach(function(event) {
-                var modEvent = {
-                    "title": event.title,
-                    "allDay": event.allday,
-                    "start": event.start,
-                    "end": event.end,
-                    "_id": event.id,
-                    "location": event.location,
-                    "description": {
-                        "organizer": event.organizer,
-                        "imageurl": event.imageurl,
-                        "status": event.status,
-                        "webpage": event.webpage,
-                        "categories": event.categories,
-                        "changed": false
-                    }
-                };
-                modEvents.push(modEvent);
-            });
-
-            console.log('Modified Events Array: ', modEvents);
-
-            callback(modEvents);
-
-            break;
-        case 'PUT':
-            var modEvents = [];
-            eventsArr.forEach(function(event) {
-                var modEvent = {
-                    "changed": event.description.changed,
-                    "data": {
-                        "title": event.title,
-                        "allday": event.allDay,
-                        "start": event.start,
-                        "end": event.end,
-                        "id": event._id,
-                        "location": event.location,
-                        "organizer": event.description.organizer,
-                        "imageurl": event.description.imageurl,
-                        "status": event.description.status,
-                        "webpage": event.description.webpage,
-                        "categories": event.description.categories,
-                    }
-                }
-
-                modEvents.push(modEvent);
-            });
-
-            console.log('Modified Events Array: ', modEvents);
-
-            callback(modEvents);
-
-            break;
-    }
-}
-
-*/
-
 function saveChanges() {
-    console.log('processing Form');
-
-    /*
-    var formEvent = {
-        "_id": $('.event-div').parent().attr('id'),
-        "title": $('.title').val(),
-        "allDay": false,
-        "start": moment($('.start-date').val()).format('YYYY-MM-DD')  + 'T' + $('.start-time').val(),
-        "end": moment($('.end-date').val()).format('YYYY-MM-DD')  + 'T' + $('.end-time').val(),
-        "description": {
-            "location": $('.location').val(),
-            "status": $('.status').val(),
-            "categories": [],
-            "organizer": $('.organizer').val(),
-            "webpage": $('.webpage').val(),
-            "imageurl": $('.imageurl').val(),
-            "changed": true,
-        }
-    }
-
-
-    if ($('.allday').is(':checked')) formEvent.allDay = true;
-
-    */
 
     var clientEvents = $('#calendar').fullCalendar('clientEvents');
 
@@ -189,6 +133,7 @@ function saveChanges() {
         }
     })
 }
+*/
 
 function auto_grow(element) {
     element.style.height = "5px";

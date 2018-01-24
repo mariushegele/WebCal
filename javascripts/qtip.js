@@ -26,6 +26,7 @@ var tooltip = $('<div/>').qtip({
             var formEvent = new Event();
             formEvent.setFormValues();
             formEvent.storeEvent();
+            formEvent.updateCalEvent();
 
             //processForm();
         }
