@@ -23,12 +23,7 @@ var tooltip = $('<div/>').qtip({
     style: 'qtip-light',
     events: {
         hide: function() {
-            var formEvent = new Event();
-            formEvent.setFormValues();
-            formEvent.storeEvent();
-            formEvent.updateCalEvent();
-
-            //processForm();
+            //console.log('Hide Event');
         }
     }
 }).qtip('api');

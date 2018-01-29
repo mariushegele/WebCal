@@ -96,10 +96,18 @@ table thead {
     margin-top: 1px;
 }
 
+.event-form .delete {
+    width: 25px;
+    height: 25px;
+    float: right;
+    border: 1px;
+    padding: 1px;
+}
+
 .event-div {
     border-radius: 2px;
     background-color: #f2f2f2;
     padding: 10px;
     width: 290px;
-    height: 100%x;
+    overflow: hidden;
 }

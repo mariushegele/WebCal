@@ -67,8 +67,8 @@ class Event {
         this.id = calInput._id;
         this.title = calInput.title;
         if(calInput.allDay) {   //respect that database expects allday events to end at 23:59
-            var endDate = moment(calInput.allDay).subtract('1', 'day').format('YYYY-MM-DD');
-            calInput.allDay = endDate + 'T23:59';
+            var endDate = moment(calInput.end).subtract('1', 'day').format('YYYY-MM-DD');
+            calInput.end = moment(endDate + 'T23:59');
         }
         this.allday = calInput.allDay;
         this.start = calInput.start;
@@ -112,7 +112,7 @@ class Event {
                 //event already has been stored -> delete and overwrite with current values
                 eventsToBeChanged.splice(eventsToBeChanged.indexOf(storedEvent));
             } else {
-                console.log('Event to be stored is a new event');
+                //console.log('Event to be stored is a new event');
             }
         })
         eventsToBeChanged.push(updatedEvent);
@@ -142,22 +142,25 @@ class Event {
 
 }
 
-/*
-function saveChanges() {
-
-    var clientEvents = $('#calendar').fullCalendar('clientEvents');
-
-    clientEvents.forEach(function(clientEvent) {
-        if (clientEvent._id == formEvent._id) {
-            console.log('Corresponding Event: ', clientEvent);
-            var combinedEvent = Object.assign({}, clientEvent, formEvent);
-            console.log('Combined: ', combinedEvent);
-
-            $('#calendar').fullCalendar('updateEvent', combinedEvent);
-        }
-    })
+function deleteEvent() {
+    console.log('Delete this event');
+    var formEvent = new Event();
+    formEvent.setFormValues();
+    formEvent.changed = 'delete';
+    if($('.event-div').parent().attr('id').startsWith('New')) { //if event is new delete existing entry in to be changed array
+        eventsToBeChanged.forEach(function(storedEvent) {
+            if(storedEvent.id === formEvent.id) eventsToBeChanged.splice(eventsToBeChanged.indexOf(event));
+        })
+    } else {
+        formEvent.storeEvent();
+    }
+    $('.event-div').parent().attr('id', 'delete');
+    formEvent.updateCalEvent();
+    $('#calendar').fullCalendar('removeEvents', function(calEvent) { //returns true if calEventID equals formEventID
+        return calEvent._id === formEvent.id;
+    });
+    tooltip.hide();
 }
-*/
 
 function auto_grow(element) {
     element.style.height = "5px";
