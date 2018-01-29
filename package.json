@@ -10,7 +10,7 @@
     "eonasdan-bootstrap-datetimepicker": "https://github.com/mariushegele/bootstrap-datetimepicker.git",
     "fullcalendar": "^3.8.0",
     "jquery": "^3.2.1",
-    "moment": "^2.19.4",
+    "moment": "2.20.1",
     "qtip2": "^3.0.3",
     "timepicker": "^1.11.12"
   }
