@@ -79,9 +79,37 @@ $(document).ready(function() {
         header: {
             left: 'prev,next today save',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month,agendaWeek,agendaDay,listAll'
+        },
+        views: {
+            listAll: {    //edit such that it lists past 10 years
+                type: 'list',
+                title: 'YYYY-MM',
+                buttonText: 'list',
+                timeFormat: 'HH:mm',
+                visibleRange: function(currentDate) {
+                    return {
+                        start: currentDate.clone().subtract(15, 'years'),
+                        end: currentDate.clone().add(10, 'years') // exclusive end, so 3
+                    };
+                },
+            }
         },
         defaultView: 'month',
+        visibleRange: function(currentDate) {
+            return {
+                start: currentDate.clone().startOf('month'),
+                end: currentDate.clone().endOf('month') // exclusive end, so 3
+            };
+        },
+        viewRender: function(view) {
+            console.log(view);
+            if(view.name === 'listAll') {
+                window.setTimeout(function(){
+                    $("#calendar").find('.fc-toolbar > div > h2').empty().append("All Events");
+                },0);
+            }
+        },
         editable: true,
         selectable: true,
         timezone: 'local',
@@ -210,12 +238,14 @@ $(document).ready(function() {
                 newEvent.end = end;
                 if(view.name = 'month') {
                     newEvent.allday = true;
+                    console.log(moment(date).format(dateFormat) + 'T23:59');
                     newEvent.end = moment(date).format(dateFormat) + 'T23:59';
                 }
                 newEvent.storeEvent();
-                console.log('Created Event: ', JSON.stringify(newEvent));
-                $('#calendar').fullCalendar( 'renderEvent', newEvent.formatForCal());
-                toggleTooltip(newEvent.formatForCal(), jsEvent);
+                //console.log('Created Event: ', JSON.stringify(newEvent));
+                var calEvent = newEvent.formatForCal();
+                $('#calendar').fullCalendar( 'renderEvent', calEvent);
+                toggleTooltip(calEvent, jsEvent);
             }
         },
         eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) {
@@ -248,6 +278,9 @@ $(document).ready(function() {
         eventDragStart: function() { tooltip.hide() },
         viewDisplay: function() { tooltip.hide() },
         events: function(start, end, timezone, callback) {
+
+            console.log('Start: ', start);
+            console.log('End: ', end);
 
             /*
             var offlineEvents = [
@@ -356,11 +389,31 @@ function toggleTooltip(data, jsEvent) {
 
     //console.log('Position tooltip at: ', jsEvent.clientX, 'relative to Page width: ', $('.event-div').width());
 
-    if(jsEvent.clientX < 1.7 * $('.event-div').width()) {
-        tooltip.set({
-            'position.my': 'left center',
-            'position.at': 'right center'
-        })
+    if(jsEvent.clientX < 0.4 * $('body').width()) {
+        if(jsEvent.clientY < 0.4 * $('body').height()) {    //top left
+                console.log('top left');
+            tooltip.set({
+                'position.my': 'top left',
+                'position.at': 'bottom right'
+            })
+        } else {
+            tooltip.set({                                       //center left
+                'position.my': 'left center',
+                'position.at': 'right center'
+            })
+        }
+    } else {
+        if(jsEvent.clientY < 1 * $('.event-div').height()) {    //top right
+            tooltip.set({
+                'position.my': 'top right',
+                'position.at': 'bottom left'
+            })
+        } else {
+            tooltip.set({                                       //center right
+                'position.my': 'right center',
+                'position.at': 'left center'
+            })
+        }
     }
 
     tooltip.reposition(event)
@@ -369,6 +422,11 @@ function toggleTooltip(data, jsEvent) {
     $( ".event-form").children().each( function(index, element ){
         $(element).keypress(function(e) {
             if(e.which == 13 && !$(element).is('textarea')){
+                e.preventDefault();
+                var formEvent = new Event();
+                formEvent.setFormValues();
+                formEvent.storeEvent();
+                formEvent.updateCalEvent();
                 tooltip.hide()
             }
         })

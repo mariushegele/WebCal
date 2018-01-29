@@ -60,6 +60,8 @@ class Event {
             }
         };
 
+        //console.log('Formatted for cal: ', calEvent);
+
         return calEvent;
     }
 
@@ -117,7 +119,7 @@ class Event {
         })
         eventsToBeChanged.push(updatedEvent);
 
-        console.log('Event stored: ', JSON.stringify(updatedEvent));
+        //console.log('Event stored: ', JSON.stringify(updatedEvent));
         console.log('Storage: ', JSON.stringify(eventsToBeChanged));
     }
 
