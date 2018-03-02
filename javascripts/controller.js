@@ -7,10 +7,6 @@ var dateFormat = 'YYYY-MM-DD';
 var timeFormat = 'HH:mm';
 var newEventIterator = 0;
 
-/*
-Object.setPrototypeOf({ a: 1 }, Foo.prototype)
- */
-
 class Event {
     constructor(eventDefault) {
         for (var prop in eventDefault) this[prop] = eventDefault[prop];
@@ -29,6 +25,7 @@ class Event {
         this.organizer = defaultOrganizer;
         this.status = 'Busy';
         this.changed = true;
+        this.categories = [];
     }
 
     //sorts by Interval [start, end] and formats event into an fullCalendar compatible json
@@ -57,8 +54,19 @@ class Event {
                 "webpage": this.webpage,
                 "categories": this.categories,
                 "changed": this.changed
-            }
+            },
         };
+
+        console.log(this);
+
+        this.categories.forEach(function(objCategory) {
+            categories.forEach(function (category) {
+                if (objCategory.id === category.id) {
+                    calEvent["backgroundColor"] = category.color;
+                    calEvent["borderColor"] = category.color;
+                }
+            });
+        });
 
         //console.log('Formatted for cal: ', calEvent);
 
@@ -95,7 +103,23 @@ class Event {
         this.end = moment($('.end-date').val()).format('YYYY-MM-DD')  + 'T' + $('.end-time').val();
         if(!$('.location').val().length > 0) this.location = $('.location').val();
         this.status = $('.status').val();
-        this.categories = [];          //to be done
+        this.categories = [];
+        var cats = [];
+        console.log($('.categories').val());
+        $('.categories').val().forEach(function(formCatId) {
+            console.log(formCatId);
+            var catName;
+            categories.forEach(function(cat) {
+                if(cat.id === parseInt(formCatId)) {
+                    catName = cat.name;
+                    cats.push({
+                        "id": parseInt(formCatId),
+                        "name": catName
+                    });
+                }
+            });
+        });
+        this.categories = cats;
         this.organizer = $('.organizer').val();
         this.webpage = $('.webpage').val();
         if(id.startsWith('New')) {
@@ -109,8 +133,13 @@ class Event {
 
     storeEvent() {
         var updatedEvent = this;
+        if(this.id.startsWith('New')) {
+            this.changed = 'new';
+        } else {
+            this.changed = true;
+        }
         eventsToBeChanged.forEach(function(storedEvent) {
-            if(storedEvent.id == updatedEvent.id) {
+            if(storedEvent.id === updatedEvent.id) {
                 //event already has been stored -> delete and overwrite with current values
                 eventsToBeChanged.splice(eventsToBeChanged.indexOf(storedEvent));
             } else {
@@ -125,7 +154,7 @@ class Event {
 
     updateCalEvent() {
 
-        event = new Event(this);
+        var event = new Event(this);
         var clientEvents = $('#calendar').fullCalendar('clientEvents');
         //console.log('Client Events: ', clientEvents);
         clientEvents.forEach(function(calEvent) {
