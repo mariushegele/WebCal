@@ -1,14 +1,50 @@
-var categories = [];
-var catEditMode = false;
-var colorLibrary = ['#00884b', '#e3bc13', '#aa231f', '#9320a2', '#5a3ec8', '#188291', '#047cc0', '#008673', '#fe8500', '#73a22c', '#e39d14', '#c45433', '#dc267f', '#777677'];
-var newRowCounter = 1;
+fetchCategories(function() {
+    fillCatTable();
+    hideCatLoad();
+    updateCategoryColors();
+});
 
 $(document).ready(function() {
     $('.fc-center').append($('<h2>').attr('hidden', true).text('Categories'));
     var catSettings = $('#catSettings-template').html();
     $('body').append(catSettings);
+    $('#categories-button').mousedown(function() {
+        $(this).css('box-shadow', 'inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)');
+    });
 });
 
+function fetchCategories(callback) {
+    $.ajax({
+        url: url + userID + "/categories",
+        dataType: 'json',
+        type: "GET",
+        success: function (res) {
+            console.log('Status 200');
+            console.log('All categories: ', res);
+            //map a corresponding color
+            let i = 0;
+            res.forEach(function(category) {
+                category['color'] = colorLibrary[i];
+                i++;
+                if(i > colorLibrary.length - 1) i = 0;
+            });
+
+            showBanner('GET all Categories successful', 'No. of Categories: ' + res.length, 'success');
+            categories = res;
+
+            callback();
+        },
+        error: function (res) {
+            let text;
+            console.log('Error getting Categories: ', res );
+            if(res.status === 0) text = 'Internet disconnected';
+            else text = 'Code: ' + res.responseJSON.code
+                + ', Description: ' + res.responseJSON.description;
+            showBanner('Error getting all Categories', text, 'error');
+
+        }
+    });
+}
 
 function toggleCatSettings() {
     catEditMode = !catEditMode;
@@ -75,7 +111,7 @@ function fillCatTable() {
             }
         }
 
-        //for each add a td with a delte button
+        //for each add a td with a delete button
         $('#' + category.id).append($('<td>')
             .attr('class', 'cat_delete')
             .append($('<input>')
@@ -83,14 +119,14 @@ function fillCatTable() {
                 .attr('src', '../images/ic_delete_black_24dp_2x.png')
                 .attr('alt', 'Delete Category')
                 .click(function() {
-                    deleteEvent(category.id);
+                    deleteCategory(category.id);
                 })
             )
         );
     });
 }
 
-function deleteEvent(id) {
+function deleteCategory(id) {
     console.log('Deleting category ', id);
     $('#' + id)
         .attr('changed', 'delete')
@@ -107,4 +143,22 @@ function hideCatLoad() {
     //show category table and hide loading gif
     $('#loadingCatsRow').hide();
     $('#catTableBody').show();
+}
+
+function updateCategoryColors(category) {
+    var clientEvents = $('#calendar').fullCalendar('clientEvents');
+    clientEvents.forEach(function(calEvent) {
+        console.log('Category: ', category);
+        console.log('inArray: ', $.inArray(category.name, calEvent.description.categories));
+
+        calEvent.description.categories.forEach(function(calCategory) {
+          if(calCategory.id == category.id) {
+              calEvent["backgroundColor"] = category.color;
+              calEvent["borderColor"] = category.color;
+              //console.log('CalEvent to be updated: ', calEvent);
+              $('#calendar').fullCalendar('updateEvent', calEvent);
+              console.log('Updated calendar event: ', calEvent);
+          }
+        })
+    })
 }

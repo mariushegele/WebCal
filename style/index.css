@@ -1,181 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+}
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.fc-clear {
-    display: none;
-}
-
-#catSettings {
-    display: none;
-    z-index: 1000;
-    margin: 0 auto;
-    margin-top: 70px;
-    border-radius: 2px;
-    background-color: #f2f2f2;
-    padding: 10px;
-    height: 50%;
-    width: 70%;
-    overflow: hidden;
-}
-
-#catTable {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#catTable th, #catTable td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#catTable tr:nth-child(even){background-color: #f2f2f2;}
-
-#catTable tr:hover {background-color: #ddd;}
-
-#catTable th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #1f57a4;
-    color: white;
-}
-
-.cat_id {
-    width: 60px;
-    font-size: 16px;
-}
-
-.cat_color {
-    width: 70px;
-    text-align: center;
-}
-
-.cat_delete {
-    width: 15px;
-}
-
-.cat_name_val {
-    box-sizing: border-box;
-    font-size: 14px;
-    outline: none;
-    border: none;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    font-weight: bold;
-}
-
-.cat_delete input {
-    width: 25px;
-    height: 25px;
-    float: right;
-    border: 1px;
-    padding: 1px;
-}
-
-#loadingCatsGif {
-    display: block;
-    width: 35px;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.addCatRow {
-    vertical-align: text-bottom;
+    font-family: Helvetica, sans-serif;
 }
 
 .qtip {
     max-width: 400px;
+    position: absolute;
+    z-index: 1000;
 }
 
-.ui-timepicker-wrapper {
-    position: relative;
-    z-index: 15001;
+#qtip-growl-container{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
 }
-
-.date-wrapper div input[type=text] {
-    width: 120px;
-    margin: 1px;
-    margin-left: 12px;
-}
-
-.date-wrapper .date-div .end-date {
-    margin-left: 7px;
-}
-
-.date-wrapper .time-div .end-time {
-    margin-left: 22px;
-    margin-top: 2px;
-}
-
-.event-form input[type=text], textarea {
-    width: 100%;
-    padding: 4px 10px;
-    margin: 2px 0;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-}
-
-.event-form textarea {
-    max-width: 100%;
-    min-width: 100%;
-    resize: none;
-    min-height: 100%;
-    max-height: 100px;
-}
-
-.event-form {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-}
-
-.event-form div input[type=checkbox] {
-    margin: 1px;
-}
-
-
-.event-form div select {
-    margin: 1px;
-}
-
-.event-form div select:invalid {
-    color: gray;
-}
-
-.event-form div label {
-    margin-left: 5px;
-}
-
-.event-form div {
-    margin-top: 1px;
-}
-
-.event-form .delete {
-    width: 25px;
-    height: 25px;
-    float: right;
-    border: 1px;
-    padding: 1px;
-}
-
-.event-div {
-    border-radius: 2px;
-    background-color: #f2f2f2;
-    padding: 10px;
-    width: 290px;
+#qtip-growl-container .qtip{
+    position: static;
+    min-height: 0;
     overflow: hidden;
-}
-
-.fc-settings-button {
-    background: url('../images/ic_menu_black_24dp_2x.png') no-repeat center;
-    background-size: 80% 85%;
-    display:block;
-    width: 40px;
-    height: 40px;
+    margin: 0 0 5px 0;
 }

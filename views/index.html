@@ -13,17 +13,23 @@
     <script type="text/javascript" src="../libs/node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="../libs/node_modules/fullcalendar/dist/fullcalendar.js"></script>
     <script type="text/javascript" src="../libs/node_modules/qtip2/dist/jquery.qtip.js"></script>
+    <script type="text/javascript" src="../libs/node_modules/jgrowl/jquery.jgrowl.js"></script>
     <script src="../libs/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
     <script type="text/javascript" src="../libs/node_modules/timepicker/jquery.timepicker.js"></script>
     <script type="text/javascript" src="../libs/node_modules/multiple-select/multiple-select.js"></script>
+    <script type="text/javascript" src="../libs/color-thief-master/src/color-thief.js"></script>
 
     <link rel="stylesheet" href="../libs/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="../libs/node_modules/fullcalendar/dist/fullcalendar.css" />
     <link rel="stylesheet" href="../libs/node_modules/qtip2/dist/jquery.qtip.css" />
+    <link rel="stylesheet" href="../libs/node_modules/jgrowl/jquery.jgrowl.css" />
     <link rel="stylesheet" href="../libs/jquery-ui-1.11.4.custom/jquery-ui.css">
     <link rel="stylesheet" href="../libs/node_modules/timepicker/jquery.timepicker.css">
     <link href="../libs/node_modules/multiple-select/multiple-select.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../style/index.css" />
+    <link rel="stylesheet" href="../style/toolbar.css" />
+    <link rel="stylesheet" href="../style/eventForm.css" />
+    <link rel="stylesheet" href="../style/categories.css" />
     <!-- <link rel="stylesheet" href="../style/eventForm.css" /> -->
 
 </head>
@@ -68,15 +74,21 @@
                 <br>
                 <input type="text" class="webpage" placeholder="Webpage">
                 <br>
-                <input type="text" class="imageurl" placeholder="ImageURL">
-                <input type="image" class="delete" src="../images/ic_delete_black_24dp_2x.png" alt="Delete Event" onclick="deleteEvent(); return false;" />
+                <input type="file" class="imageurl" accept="image/*" placeholder="Image" onchange="setImage(this);">
+                <figure class="image-figure">
+                    <figcaption>
+                        <input type="image" class="image-remove" src="../images/ic_remove_circle_black_24dp_2x.png" title="Remove Image" onclick="removeImage(); return false;" />
+                    </figcaption>
+                    <img class="image-container"/>
+                </figure>
+                <input type="image" class="delete" src="../images/ic_delete_black_24dp_2x.png" title="Delete Event" onclick="deleteEvent(); return false;" />
             </form>
         </div>
     </template>
 
     <script id="settings-template" type="text/template">
         <div id="settings">
-            <button type="button" id="categories-button" onclick="toggleCatSettings()">Edit Categories</button>
+            <button type="button" id="categories-button" onclick="toggleCatSettings()">edit categories</button>
         </div>
     </script>
 
@@ -104,12 +116,17 @@
         </div>
     </script>
 
+    <div id="qtip-growl-container"></div>
+
     <!-- JS -->
 
     <script type="text/javascript" src="../javascripts/controller.js"></script>
     <script type="text/javascript" src="../javascripts/calendar.js"></script>
+    <script type="text/javascript" src="../javascripts/events.js"></script>
     <script type="text/javascript" src="../javascripts/categories.js"></script>
     <script type="text/javascript" src="../javascripts/qtip.js"></script>
+    <script type="text/javascript" src="../javascripts/saveCategories.js"></script>
+    <script type="text/javascript" src="../javascripts/saveEvents.js"></script>
 
 </body>
 
