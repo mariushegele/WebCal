@@ -11,6 +11,6 @@ yarn
 ```
 
 The implementation primarily builds on / uses
-    * [FullCalendar](https://www.fullcalendar.io/)
-    * [jQuery](https://www.jquery.com/)
-    * [qTip2](http://www.qtip2.com/)
+* [FullCalendar](https://www.fullcalendar.io/)
+* [jQuery](https://www.jquery.com/)
+* [qTip2](http://www.qtip2.com/)
